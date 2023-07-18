@@ -1,0 +1,23 @@
+<form *ngIf="showInputToEditEdge" class="form-update-edge" (submit)="onConfirmUpdateEdge($event, newvalue.value)">
+  <p>New value for this edge</p>
+  <input #newvalue type="number" autofocus />
+  <button type="submit">Change</button>
+</form>
+
+<section class="graph-type-buttons">
+  <button (click)="onChangeWeightState()">{{graphState.isWeighted? "Not Weighted" : "Weighted"}}</button>
+  <button (click)="onChangeDirectedState()">{{graphState.isDirected? "Not Directed" : "Directed"}}</button>
+</section>
+
+<svg:svg (mousemove)="onMouseMoveOnSvg($event)" (click)="onMouseClickOnSvg($event)" cursor="cell" class="svg-layout">
+  <svg:g edge-graph *ngFor="let key of Object.keys(graphState.edgesGraph)"
+    [initialNode]="graphState.nodesGraph[graphState.edgesGraph[key].u]"
+    [finalNode]="graphState.nodesGraph[graphState.edgesGraph[key].v]" [isWeighted]="graphState.isWeighted"
+    [isDirected]="graphState.isDirected" [w]="graphState.edgesGraph[key].w" (dblclick)="onDoubleClickOnEdge(key)"
+    cursor="pointer">
+  </svg:g>
+  <svg:g node-graph *ngFor="let key of Object.keys(graphState.nodesGraph)" [key]="key"
+    attr.transform="translate({{graphState.nodesGraph[key].x}} {{graphState.nodesGraph[key].y}})" cursor="pointer"
+    (mousedown)="onMouseDownOnNode($event, key)" (mouseup)="onMouseUpOnNode()">
+  </svg:g>
+</svg:svg>

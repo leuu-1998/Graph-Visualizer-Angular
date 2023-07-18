@@ -1,0 +1,54 @@
+.svg-layout {
+  outline: var(--line-width) solid var(--line-color);
+  outline-offset: 1px;
+  border-radius: 10px;
+  min-height: 600px;
+  min-width: 550px;
+  height: 80%;
+  width: 90%;
+}
+
+.form-update-edge {
+  z-index: 20;
+  position: absolute;
+  background-color: white;
+  padding: 20px;
+  border: var(--line-width) solid var(--line-color);
+  border-radius: 10px;
+}
+
+.graph-type-buttons {
+  margin: 0px 0px 20px 0px;
+}
+
+button {
+  padding: 15px;
+  background-color: #334155;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: large;
+  cursor: pointer;
+  margin: 0px 5px 0px 5px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+input {
+  border-radius: 5px;
+  padding: 10px;
+  border: var(--line-width) solid var(--line-color);
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+p {
+  color: #334155;
+  text-align: center;
+  font-size: 24px;
+}

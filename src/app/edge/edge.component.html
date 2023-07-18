@@ -1,0 +1,10 @@
+<svg:line attr.x1="{{initialNode.x}}" attr.y1="{{initialNode.y}}" attr.x2="{{finalNode.x}}" attr.y2="{{finalNode.y}}"
+  stroke="#334155" stroke-width="3" />
+<svg:text *ngIf="isWeighted" attr.x={{textPositionX}} attr.y={{textPositionY}} class="unselectable" fill="#334155"
+  attr.transform="translate({{translateTextDistance}} {{liftDistance}})"
+  attr.transform="rotate({{rotateTextAngle}} {{textPositionX}} {{textPositionY}})">
+  {{w}}
+</svg:text>
+<svg:path *ngIf="isDirected"
+  attr.d="M {{finalNode.x}} {{finalNode.y}} L {{finalNode.x + 6}} {{finalNode.y + 20}} L {{finalNode.x - 6}} {{finalNode.y + 20}} Z"
+  attr.transform="rotate({{alfa + 90}} {{finalNode.x}} {{finalNode.y}}) translate(0 25)" fill="#334155" />
