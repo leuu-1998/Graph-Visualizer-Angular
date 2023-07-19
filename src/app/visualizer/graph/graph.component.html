@@ -13,8 +13,9 @@
   <svg:g edge-graph *ngFor="let key of Object.keys(graphState.edgesGraph)"
     [initialNode]="graphState.nodesGraph[graphState.edgesGraph[key].u]"
     [finalNode]="graphState.nodesGraph[graphState.edgesGraph[key].v]" [isWeighted]="graphState.isWeighted"
-    [isDirected]="graphState.isDirected" [w]="graphState.edgesGraph[key].w" (dblclick)="onDoubleClickOnEdge(key)"
-    cursor="pointer">
+    [isDirected]="graphState.isDirected" [edge]="graphState.edgesGraph[key]"
+    [isCurved]="findEdge(graphState.edgesGraph[key].v, graphState.edgesGraph[key].u)"
+    (dblclick)="onDoubleClickOnEdge(key)" cursor="pointer">
   </svg:g>
   <svg:g node-graph *ngFor="let key of Object.keys(graphState.nodesGraph)" [key]="key"
     attr.transform="translate({{graphState.nodesGraph[key].x}} {{graphState.nodesGraph[key].y}})" cursor="pointer"

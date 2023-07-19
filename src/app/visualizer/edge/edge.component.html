@@ -1,0 +1,19 @@
+<svg:line *ngIf="!isCurved" attr.x1="{{initialNode.x}}" attr.y1="{{initialNode.y}}" attr.x2="{{finalNode.x}}"
+  attr.y2="{{finalNode.y}}" stroke="#334155" stroke-width="3" />
+
+<svg:path *ngIf="isCurved"
+  attr.d="M {{initialNode.x}} {{initialNode.y}} Q {{bezierX}} {{bezierY}} {{finalNode.x}} {{finalNode.y}}"
+  stroke="rgba(0,0,0,0)" stroke-width="3" fill="transparent" />
+
+<svg:path *ngIf="isCurved"
+  attr.d="M {{initialNode.x}} {{initialNode.y}} Q {{bezierX}} {{bezierY}} {{finalNode.x}} {{finalNode.y}}"
+  stroke="#334155" stroke-width="3" fill="transparent" />
+
+<svg:text *ngIf="isWeighted" attr.x={{textPositionX}} attr.y={{textPositionY}} class="unselectable" fill="#334155"
+  attr.transform="translate({{translateTextDistance}} {{liftDistance}})"
+  attr.transform="rotate({{rotateTextAngle}} {{textPositionX}} {{textPositionY}})">
+  {{edge.w}}
+</svg:text>
+<svg:path *ngIf="isDirected"
+  attr.d="M {{finalNode.x}} {{finalNode.y}} L {{finalNode.x + 6}} {{finalNode.y + 20}} L {{finalNode.x - 6}} {{finalNode.y + 20}} Z"
+  attr.transform="rotate({{angle + 90}} {{finalNode.x}} {{finalNode.y}}) translate(0 18)" fill="#334155" />

@@ -14,6 +14,7 @@ export class GraphComponent {
   idCurrentEdge: number = -1;
   idCurrentNode: number = -1;
   idFirstNodeToCreateEdge: number = -1;
+  isCurved: boolean = false;
   graphState: Graph = { topNode: 0, topEdge: 0, isWeighted: true, isDirected: true, edgesGraph: {}, nodesGraph: {} };
 
   constructor(private readonly updateGraphService: UpdategraphService) { }
@@ -53,7 +54,10 @@ export class GraphComponent {
   }
 
   findEdge(u: number, v: number) {
-    return Object.values(this.graphState.edgesGraph).find((edge) => edge.u === u && edge.v === v);
+    if (Object.values(this.graphState.edgesGraph).find((edge) => edge.u === u && edge.v === v) === undefined) {
+      return false;
+    }
+    return true;
   }
 
   createEdge(id: string): void {

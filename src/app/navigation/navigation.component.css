@@ -1,0 +1,19 @@
+.principal-description {
+  text-align: justify;
+}
+
+h1,
+h2 {
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+}
+
+p {
+  text-align: justify;
+  padding: 0px 50px 0px 50px;
+  font-size: 20px;
+}
+
+hr {
+  margin: 20px 50px 20px 50px;
+}
