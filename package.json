@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --base-href https://leuu-1998.github.io/Graph-Visualizer-Angular/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
