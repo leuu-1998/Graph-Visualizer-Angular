@@ -19,48 +19,7 @@ export class GraphComponent {
 
   constructor(private readonly updateGraphService: UpdategraphService) { }
 
-  updateNode(x: number, y: number): void {
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'update-node',
-      payload: { id: this.idCurrentNode, node: { x: x, y: y } }
-    });
-  }
-
-  createNode(x: number, y: number): void {
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'create-node',
-      payload: { node: { x: x, y: y } }
-    });
-  }
-
-  deleteEdge(id: string): void {
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'delete-edge',
-      payload: id
-    });
-  }
-
-  deleteNode(id: string): void {
-    Object.entries(this.graphState.edgesGraph).forEach((element) => {
-      const [key, edge] = element;
-      if (edge.u == +id || edge.v == +id) {
-        this.deleteEdge(key);
-      }
-    });
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'delete-node',
-      payload: id
-    });
-  }
-
-  findEdge(u: number, v: number) {
-    if (Object.values(this.graphState.edgesGraph).find((edge) => edge.u === u && edge.v === v) === undefined) {
-      return false;
-    }
-    return true;
-  }
-
-  createEdge(id: string): void {
+  verifyAndCreateEdge(id: string): void {
     if (this.idFirstNodeToCreateEdge == - 1) {
       this.idFirstNodeToCreateEdge = +id;
     } else {
@@ -68,32 +27,26 @@ export class GraphComponent {
         //not create edge, since the initial and final node are the same
         return;
       }
-      if (!this.graphState.isDirected && (this.findEdge(this.idFirstNodeToCreateEdge, +id) || this.findEdge(+id, this.idFirstNodeToCreateEdge))) {
+      if (!this.graphState.isDirected && (this.updateGraphService.findEdge(this.graphState, this.idFirstNodeToCreateEdge, +id) || this.updateGraphService.findEdge(this.graphState, +id, this.idFirstNodeToCreateEdge))) {
         //is no directed and already has the edge
         return;
       }
-      if (this.graphState.isDirected && this.findEdge(this.idFirstNodeToCreateEdge, +id)) {
+      if (this.graphState.isDirected && this.updateGraphService.findEdge(this.graphState, this.idFirstNodeToCreateEdge, +id)) {
         //is directed and already has the edge
         return;
       }
-      this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-        name: 'create-edge',
-        payload: { edge: { u: this.idFirstNodeToCreateEdge, v: +id, w: 1 } }
-      });
+      this.graphState = this.updateGraphService.createEdge(this.graphState, { edge: { u: this.idFirstNodeToCreateEdge, v: +id, w: 1 } });
       this.idFirstNodeToCreateEdge = -1;
     }
   }
 
-  updateEdge(newWeight: number) {
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'update-edge',
-      payload: { id: this.idCurrentEdge, w: newWeight }
-    })
+  verifyIsCurvedConditionForEdge(key: string) {
+    return this.updateGraphService.findEdge(this.graphState, this.graphState.edgesGraph[key].v, this.graphState.edgesGraph[key].u);
   }
 
   onConfirmUpdateEdge(event: SubmitEvent, newWeight: string): void {
     event.preventDefault();
-    this.updateEdge(+newWeight);
+    this.graphState = this.updateGraphService.updateEdge(this.graphState, { id: this.idCurrentEdge, w: +newWeight });
     this.idCurrentEdge = -1;
     this.showInputToEditEdge = false;
   }
@@ -106,24 +59,24 @@ export class GraphComponent {
   onMouseClickOnSvg(event: MouseEvent): void {
     const { offsetX, offsetY } = event;
     if (event.button == 0 && event.shiftKey) {
-      this.createNode(offsetX, offsetY);
+      this.graphState = this.updateGraphService.createNode(this.graphState, { node: { x: offsetX, y: offsetY } });
     }
   }
 
   onMouseMoveOnSvg(event: MouseEvent): void {
     const { offsetX, offsetY } = event;
     if (this.moveState == true) {
-      this.updateNode(offsetX, offsetY);
+      this.graphState = this.updateGraphService.updateNode(this.graphState, { id: this.idCurrentNode, node: { x: offsetX, y: offsetY } });
     }
   }
 
   onMouseDownOnNode(event: MouseEvent, id: string): void {
     if (event.ctrlKey) {
-      this.deleteNode(id);
+      this.graphState = this.updateGraphService.deleteNode(this.graphState, id);
       return;
     }
     if (event.altKey) {
-      this.createEdge(id);
+      this.verifyAndCreateEdge(id);
       return;
     }
     this.idCurrentNode = +id;
@@ -136,16 +89,10 @@ export class GraphComponent {
   }
 
   onChangeWeightState(): void {
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'update-isWeight',
-      payload: {}
-    });
+    this.graphState = this.updateGraphService.updateIsWeighted(this.graphState);
   }
 
   onChangeDirectedState(): void {
-    this.graphState = this.updateGraphService.dataGraphReducer(this.graphState, {
-      name: 'update-isDirected',
-      payload: {}
-    });
+    this.graphState = this.updateGraphService.updateIsDirected(this.graphState);
   }
 }
